@@ -21,6 +21,8 @@ class SourceLibrary:
     gifs: List[Path] = field(default_factory=list)
     audio: List[Path] = field(default_factory=list)
     transitions: List[Path] = field(default_factory=list)
+    spadinner_audio: List[Path] = field(default_factory=list)
+    spadinner_videos: List[Path] = field(default_factory=list)
     urls: List[str] = field(default_factory=list)
 
 
@@ -52,6 +54,7 @@ class ProjectSettings:
     remixes_number: int = 0
     autoytp_number: int = 0
     ytp_effects_name: str = "default"
+    insert_spadinner: bool = False
     insert_transitions: bool = True
     insert_intro: bool = False
     insert_outro: bool = False

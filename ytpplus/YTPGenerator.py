@@ -86,6 +86,10 @@ class YTPGenerator:
                 "overlays": effects.overlays,
                 "notes": effects.notes,
             },
+            "spadinner": {
+                "audio": [str(p) for p in self.job.sources.spadinner_audio],
+                "videos": [str(p) for p in self.job.sources.spadinner_videos],
+            },
         }
         return plan
 

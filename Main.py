@@ -62,6 +62,18 @@ class YTPPlusDeluxeApp(tk.Tk):
         self._add_source_group(left, "GIFs", "gifs", ("GIF Files", "*.gif"))
         self._add_source_group(left, "Audio", "audio", ("Audio Files", "*.mp3 *.wav *.ogg"))
         self._add_source_group(left, "Transitions", "transitions", ("Video Files", "*.mp4 *.wmv *.avi *.mkv"))
+        self._add_source_group(
+            left,
+            "Spadinner Audio",
+            "spadinner_audio",
+            ("Audio Files", "*.mp3 *.wav *.ogg"),
+        )
+        self._add_source_group(
+            left,
+            "Spadinner Videos",
+            "spadinner_videos",
+            ("Video Files", "*.mp4 *.wmv *.avi *.mkv"),
+        )
 
         url_label = ttk.Label(right, text="Online URLs (YouTube/Facebook/etc.)")
         url_label.pack(anchor="w")
@@ -230,6 +242,7 @@ class YTPPlusDeluxeApp(tk.Tk):
         self.preserve_audio_var = tk.BooleanVar(value=self.settings.preserve_original_audio)
         self.cut_audio_var = tk.BooleanVar(value=self.settings.cut_audio)
         self.sound_sync_var = tk.BooleanVar(value=self.settings.sound_sync_mode)
+        self.insert_spadinner_var = tk.BooleanVar(value=self.settings.insert_spadinner)
         ttk.Checkbutton(toggle_frame, text="Insert Transitions", variable=self.insert_transitions_var).pack(side=tk.LEFT)
         ttk.Checkbutton(toggle_frame, text="Insert Intro", variable=self.insert_intro_var).pack(side=tk.LEFT)
         ttk.Checkbutton(toggle_frame, text="Insert Outro", variable=self.insert_outro_var).pack(side=tk.LEFT)
@@ -238,6 +251,9 @@ class YTPPlusDeluxeApp(tk.Tk):
         ttk.Checkbutton(toggle_frame, text="Preserve Audio", variable=self.preserve_audio_var).pack(side=tk.LEFT)
         ttk.Checkbutton(toggle_frame, text="Cut Audio", variable=self.cut_audio_var).pack(side=tk.LEFT)
         ttk.Checkbutton(toggle_frame, text="Sound Sync Mode", variable=self.sound_sync_var).pack(side=tk.LEFT)
+        ttk.Checkbutton(toggle_frame, text="Insert Spadinner Clips", variable=self.insert_spadinner_var).pack(
+            side=tk.LEFT
+        )
 
         intro_row = ttk.Frame(frame)
         intro_row.pack(fill=tk.X, padx=10, pady=5)
@@ -297,10 +313,10 @@ class YTPPlusDeluxeApp(tk.Tk):
     def _build_render_tab(self) -> None:
         frame = self.render_frame
         overview = (
-            "YTP+ Deluxe Edition V2 (Python) is an automated YTP editor scaffold for Windows 7/8.1.\n"
-            "Import media, tune effect parameters, and let the generator remix clips into a single render.\n"
-            "This is a WIP V2 build with major feature placeholders. Export plans or render via FFmpeg.\n"
-            "Preview uses FFplay when available, otherwise FFmpeg."
+            "YTP+ Deluxe Edition V2 (Python) Beta 1 is an automated YTP editor scaffold for Windows 7/8.1.\n"
+            "Import media, tune effect toggles, clip counts, and min/max stream duration settings.\n"
+            "Create Video renders ytp_output.mp4 via FFmpeg concat. Preview uses FFplay when available.\n"
+            "This is a WIP V2 build with major feature placeholders."
         )
         ttk.Label(frame, text=overview, justify=tk.LEFT).pack(anchor="w", padx=10, pady=10)
 
@@ -347,6 +363,7 @@ class YTPPlusDeluxeApp(tk.Tk):
         self.preserve_audio_var.set(self.settings.preserve_original_audio)
         self.cut_audio_var.set(self.settings.cut_audio)
         self.sound_sync_var.set(self.settings.sound_sync_mode)
+        self.insert_spadinner_var.set(self.settings.insert_spadinner)
         self.ytp_effects_name_var.set(self.settings.ytp_effects_name)
         self.intro_var.set(self.settings.intro_path)
         self.outro_var.set(self.settings.outro_path)
@@ -361,7 +378,7 @@ class YTPPlusDeluxeApp(tk.Tk):
             self.effect_prob_vars[key].set(config.probability)
             self.effect_level_vars[key].set(config.max_level)
 
-        for attr in ["videos", "images", "gifs", "audio", "transitions"]:
+        for attr in ["videos", "images", "gifs", "audio", "transitions", "spadinner_audio", "spadinner_videos"]:
             getattr(self, f"{attr}_listbox").delete(0, tk.END)
         self.url_list.delete(0, tk.END)
 
@@ -376,6 +393,7 @@ class YTPPlusDeluxeApp(tk.Tk):
         self.settings.preserve_original_audio = self.preserve_audio_var.get()
         self.settings.cut_audio = self.cut_audio_var.get()
         self.settings.sound_sync_mode = self.sound_sync_var.get()
+        self.settings.insert_spadinner = self.insert_spadinner_var.get()
         self.settings.ytp_effects_name = self.ytp_effects_name_var.get()
         self.settings.intro_path = self.intro_var.get()
         self.settings.outro_path = self.outro_var.get()

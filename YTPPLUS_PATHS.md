@@ -45,6 +45,7 @@ These folders live under `resources/` and are auto-created by the app:
 - `preserve_original_audio` — keep original audio under overlays.
 - `cut_audio` — remove original audio entirely.
 - `sound_sync_mode` — align sound overlays to cuts for sync humor.
+- `insert_spadinner` — enable spadinner audio/video inserts.
 - `temp_number` — suffix index for temp render batches.
 - `recall_number` — post-render recall iterations (placeholder).
 - `remixes_number` — remix pass count (placeholder).
