@@ -28,11 +28,28 @@ These folders live under `resources/` and are auto-created by the app:
 - `resources/overlay_videos/` — overlay video clips
 - `resources/adverts/` — advert overlay clips
 - `resources/errors/` — glitch/error overlays
+- `resources/spadinner/` — spadinner overlay assets
+- `resources/spadinner_sounds/` — spadinner audio stingers
 
 ## Default Media Paths
 
 - `resources/intro.mp4` — intro clip (optional)
 - `resources/outro.mp4` — outro clip (optional)
+
+## Clip and Sound Controls
+
+- `min_clip_duration` / `max_clip_duration` — range for randomized clip durations.
+- `effects_per_clip` — max effect passes per clip.
+- `reverse_direction` — force reverse playback direction.
+- `sound_frequency` — probability of sound overlay placement.
+- `preserve_original_audio` — keep original audio under overlays.
+- `cut_audio` — remove original audio entirely.
+- `sound_sync_mode` — align sound overlays to cuts for sync humor.
+- `temp_number` — suffix index for temp render batches.
+- `recall_number` — post-render recall iterations (placeholder).
+- `remixes_number` — remix pass count (placeholder).
+- `autoytp_number` — automatic YTP pass count (placeholder).
+- `ytp_effects_name` — label for the active effect preset.
 
 ## Related Config File
 

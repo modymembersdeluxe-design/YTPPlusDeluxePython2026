@@ -39,6 +39,23 @@ class YTPGenerator:
         cmd += [str(output_path)]
         return cmd
 
+    def _concat_cmd(self, concat_file: Path, output_path: Path) -> List[str]:
+        filters = self._build_filters()
+        cmd = [
+            self.job.tool_paths.ffmpeg,
+            "-y",
+            "-f",
+            "concat",
+            "-safe",
+            "0",
+            "-i",
+            str(concat_file),
+        ]
+        if filters:
+            cmd += ["-filter_complex", filters]
+        cmd += [str(output_path)]
+        return cmd
+
     def preview(self, input_path: Path) -> None:
         ffplay = shutil.which(self.job.tool_paths.ffplay) or shutil.which("ffplay")
         ffmpeg = shutil.which(self.job.tool_paths.ffmpeg) or shutil.which("ffmpeg")
@@ -79,4 +96,10 @@ class YTPGenerator:
 
     def render(self, input_path: Path, output_path: Path) -> subprocess.CompletedProcess:
         cmd = self._ffmpeg_cmd(input_path, output_path)
+        return subprocess.run(cmd, check=False, capture_output=True, text=True)
+
+    def render_concat(self, inputs: Iterable[Path], output_path: Path) -> subprocess.CompletedProcess:
+        concat_file = Path(self.job.settings.temp_dir) / "concat.txt"
+        self._write_concat_file(inputs, concat_file)
+        cmd = self._concat_cmd(concat_file, output_path)
         return subprocess.run(cmd, check=False, capture_output=True, text=True)
