@@ -297,9 +297,10 @@ class YTPPlusDeluxeApp(tk.Tk):
     def _build_render_tab(self) -> None:
         frame = self.render_frame
         overview = (
-            "YTP+ Deluxe Edition (Python) is an automated YTP editor scaffold for Windows 7/8.1.\n"
+            "YTP+ Deluxe Edition V2 (Python) is an automated YTP editor scaffold for Windows 7/8.1.\n"
             "Import media, tune effect parameters, and let the generator remix clips into a single render.\n"
-            "Export plans or render via FFmpeg. Preview uses FFplay when available, otherwise FFmpeg."
+            "This is a WIP V2 build with major feature placeholders. Export plans or render via FFmpeg.\n"
+            "Preview uses FFplay when available, otherwise FFmpeg."
         )
         ttk.Label(frame, text=overview, justify=tk.LEFT).pack(anchor="w", padx=10, pady=10)
 
