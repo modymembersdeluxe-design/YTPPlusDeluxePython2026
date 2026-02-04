@@ -107,3 +107,24 @@ class YTPGenerator:
         self._write_concat_file(inputs, concat_file)
         cmd = self._concat_cmd(concat_file, output_path)
         return subprocess.run(cmd, check=False, capture_output=True, text=True)
+
+    def render_preview(self, input_path: Path, seconds: int = 15) -> subprocess.CompletedProcess:
+        output_path = Path(self.job.settings.temp_dir) / "preview.mp4"
+        cmd = [
+            self.job.tool_paths.ffmpeg,
+            "-y",
+            "-t",
+            str(seconds),
+            "-i",
+            str(input_path),
+            str(output_path),
+        ]
+        return subprocess.run(cmd, check=False, capture_output=True, text=True)
+
+    def render_v2(self, inputs: Iterable[Path], output_path: Path) -> subprocess.CompletedProcess:
+        inputs_list = list(inputs)
+        if len(inputs_list) > 1:
+            return self.render_concat(inputs_list, output_path)
+        if not inputs_list:
+            raise ValueError("No inputs provided for render_v2.")
+        return self.render(inputs_list[0], output_path)

@@ -329,6 +329,8 @@ class YTPPlusDeluxeApp(tk.Tk):
         ttk.Button(action_frame, text="Export Plan JSON", command=self._export_plan).pack(side=tk.LEFT, padx=4)
         ttk.Button(action_frame, text="Render (Stub)", command=self._render_stub).pack(side=tk.LEFT, padx=4)
         ttk.Button(action_frame, text="Create Video", command=self._create_video).pack(side=tk.LEFT, padx=4)
+        ttk.Button(action_frame, text="Render 2 (Concat)", command=self._render_v2).pack(side=tk.LEFT, padx=4)
+        ttk.Button(action_frame, text="Render Preview", command=self._render_preview).pack(side=tk.LEFT, padx=4)
 
     def _browse_intro(self) -> None:
         path = filedialog.askopenfilename(filetypes=[("Video Files", "*.mp4 *.wmv *.avi *.mkv")])
@@ -471,6 +473,36 @@ class YTPPlusDeluxeApp(tk.Tk):
             result = generator.render(self.sources.videos[0], output_path)
         self._log(f"Create video exit code: {result.returncode}")
         self._log(f"Output: {output_path}")
+        if result.stdout:
+            self._log(result.stdout)
+        if result.stderr:
+            self._log(result.stderr)
+
+    def _render_v2(self) -> None:
+        job = self._build_job()
+        generator = YTPGenerator(job)
+        if not self.sources.videos:
+            messagebox.showwarning("Render 2", "Add at least one video source to render.")
+            return
+        output_path = Path(self.settings.temp_dir) / "ytp_output_v2.mp4"
+        result = generator.render_v2(self.sources.videos, output_path)
+        self._log(f"Render 2 exit code: {result.returncode}")
+        self._log(f"Output: {output_path}")
+        if result.stdout:
+            self._log(result.stdout)
+        if result.stderr:
+            self._log(result.stderr)
+
+    def _render_preview(self) -> None:
+        job = self._build_job()
+        generator = YTPGenerator(job)
+        if not self.sources.videos:
+            messagebox.showwarning("Render Preview", "Add at least one video source to render.")
+            return
+        result = generator.render_preview(self.sources.videos[0])
+        preview_path = Path(self.settings.temp_dir) / "preview.mp4"
+        self._log(f"Render preview exit code: {result.returncode}")
+        self._log(f"Preview output: {preview_path}")
         if result.stdout:
             self._log(result.stdout)
         if result.stderr:

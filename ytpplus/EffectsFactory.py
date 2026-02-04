@@ -35,6 +35,8 @@ class EffectsFactory:
 
         if enabled("random_sound"):
             notes.append("Random sound overlay enabled; will mix from assets.")
+        if enabled("random_clip_shuffle"):
+            notes.append("Remix shuffle enabled for render v2.")
         if enabled("reverse"):
             audio_filters.append("areverse")
             video_filters.append("reverse")

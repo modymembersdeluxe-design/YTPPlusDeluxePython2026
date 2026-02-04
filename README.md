@@ -9,6 +9,7 @@ This repository contains a Tkinter-based scaffold for a YTP (YouTube Poop) effec
 - Toggleable audio/video effects with per-effect probability and max level.
 - Controls for clip count, min/max stream duration, clip duration, effect layers, direction, and sound placement frequency.
 - Create Video action renders `ytp_output.mp4` via FFmpeg concat from the selected sources.
+- Render 2 (Concat) writes `ytp_output_v2.mp4` and Render Preview writes `preview.mp4`.
 - Insert transitions and spadinner clips can be toggled from the Settings tab.
 - V2 work-in-progress scaffolding with major feature placeholders for future expansion.
 - Preview using FFplay (falls back to FFmpeg if available).
