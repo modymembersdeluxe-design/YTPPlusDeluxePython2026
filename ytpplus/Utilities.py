@@ -39,6 +39,14 @@ class ProjectSettings:
     height: int = 480
     min_stream_duration: float = 0.2
     max_stream_duration: float = 0.4
+    min_clip_duration: float = 0.5
+    max_clip_duration: float = 2.5
+    effects_per_clip: int = 1
+    reverse_direction: bool = False
+    sound_frequency: float = 0.5
+    preserve_original_audio: bool = True
+    cut_audio: bool = False
+    sound_sync_mode: bool = False
     insert_transitions: bool = True
     insert_intro: bool = False
     insert_outro: bool = False
@@ -82,6 +90,62 @@ DEFAULT_EFFECTS: Dict[str, EffectConfig] = {
     "stutter": EffectConfig(
         name="Stutter Loop",
         description="Repeat a short slice of the clip.",
+    ),
+    "recall_post_render": EffectConfig(
+        name="Recall Post Render",
+        description="Placeholder for post-render recall processing.",
+    ),
+    "get_down": EffectConfig(
+        name="Get Down Effect",
+        description="Rhythmic speed/tempo preset.",
+    ),
+    "temporal_scramble": EffectConfig(
+        name="Temporal Scramble",
+        description="Scramble clip timing for chaotic edits.",
+    ),
+    "high_harmony": EffectConfig(
+        name="High Harmony",
+        description="Pitch-shift audio to a higher harmony.",
+    ),
+    "low_harmony": EffectConfig(
+        name="Low Harmony",
+        description="Pitch-shift audio to a lower harmony.",
+    ),
+    "fearful": EffectConfig(
+        name="Fearful Effect",
+        description="Apply darkened tone and audio warble.",
+    ),
+    "half_reversed": EffectConfig(
+        name="Half Reversed",
+        description="Reverse mid-section of a clip.",
+    ),
+    "pitch_shift": EffectConfig(
+        name="Pitch Shift",
+        description="Shift audio pitch without tempo change.",
+    ),
+    "mirror_symmetry": EffectConfig(
+        name="Mirror Symmetry",
+        description="Mirror video with a center seam.",
+    ),
+    "hue_rotate": EffectConfig(
+        name="Hue Rotate",
+        description="Rotate hue for psychedelic colors.",
+    ),
+    "spadinner": EffectConfig(
+        name="Spadinner Effect",
+        description="Overlay spadinner assets and audio.",
+    ),
+    "confusion": EffectConfig(
+        name="Confusion Effect",
+        description="Layer audio/video jitter for confusion.",
+    ),
+    "overlay_plus_three": EffectConfig(
+        name="Overlay +3",
+        description="Stack three overlay layers.",
+    ),
+    "ytpmv_auto": EffectConfig(
+        name="YTPMV Automatic",
+        description="Auto rhythm mapping for YTPMV edits.",
     ),
     "earrape": EffectConfig(
         name="Earrape Mode",
@@ -152,6 +216,8 @@ ASSET_FOLDERS = {
     "overlay_videos": "overlay_videos",
     "adverts": "adverts",
     "errors": "errors",
+    "spadinner": "spadinner",
+    "spadinner_sounds": "spadinner_sounds",
 }
 
 

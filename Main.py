@@ -185,6 +185,10 @@ class YTPPlusDeluxeApp(tk.Tk):
             ("Height", "height"),
             ("Min Stream Duration", "min_stream_duration"),
             ("Max Stream Duration", "max_stream_duration"),
+            ("Min Clip Duration", "min_clip_duration"),
+            ("Max Clip Duration", "max_clip_duration"),
+            ("Effects Per Clip", "effects_per_clip"),
+            ("Sound Frequency", "sound_frequency"),
         ]
         self.setting_vars = {}
         for label, attr in setting_fields:
@@ -192,7 +196,7 @@ class YTPPlusDeluxeApp(tk.Tk):
             row.pack(fill=tk.X, padx=10, pady=5)
             ttk.Label(row, text=label, width=22).pack(side=tk.LEFT)
             var = tk.DoubleVar(value=getattr(self.settings, attr))
-            if attr in {"clip_count", "width", "height"}:
+            if attr in {"clip_count", "width", "height", "effects_per_clip"}:
                 var = tk.IntVar(value=getattr(self.settings, attr))
             self.setting_vars[attr] = var
             ttk.Entry(row, textvariable=var, width=20).pack(side=tk.LEFT)
@@ -203,10 +207,18 @@ class YTPPlusDeluxeApp(tk.Tk):
         self.insert_intro_var = tk.BooleanVar(value=self.settings.insert_intro)
         self.insert_outro_var = tk.BooleanVar(value=self.settings.insert_outro)
         self.plugin_test_var = tk.BooleanVar(value=self.settings.plugin_test)
+        self.reverse_direction_var = tk.BooleanVar(value=self.settings.reverse_direction)
+        self.preserve_audio_var = tk.BooleanVar(value=self.settings.preserve_original_audio)
+        self.cut_audio_var = tk.BooleanVar(value=self.settings.cut_audio)
+        self.sound_sync_var = tk.BooleanVar(value=self.settings.sound_sync_mode)
         ttk.Checkbutton(toggle_frame, text="Insert Transitions", variable=self.insert_transitions_var).pack(side=tk.LEFT)
         ttk.Checkbutton(toggle_frame, text="Insert Intro", variable=self.insert_intro_var).pack(side=tk.LEFT)
         ttk.Checkbutton(toggle_frame, text="Insert Outro", variable=self.insert_outro_var).pack(side=tk.LEFT)
         ttk.Checkbutton(toggle_frame, text="Plugin Test", variable=self.plugin_test_var).pack(side=tk.LEFT)
+        ttk.Checkbutton(toggle_frame, text="Reverse Direction", variable=self.reverse_direction_var).pack(side=tk.LEFT)
+        ttk.Checkbutton(toggle_frame, text="Preserve Audio", variable=self.preserve_audio_var).pack(side=tk.LEFT)
+        ttk.Checkbutton(toggle_frame, text="Cut Audio", variable=self.cut_audio_var).pack(side=tk.LEFT)
+        ttk.Checkbutton(toggle_frame, text="Sound Sync Mode", variable=self.sound_sync_var).pack(side=tk.LEFT)
 
         intro_row = ttk.Frame(frame)
         intro_row.pack(fill=tk.X, padx=10, pady=5)
@@ -266,9 +278,9 @@ class YTPPlusDeluxeApp(tk.Tk):
     def _build_render_tab(self) -> None:
         frame = self.render_frame
         overview = (
-            "YTP+ Deluxe Edition (Python) is a Windows 7/8.1-friendly YTP editor scaffold.\n"
-            "Use the tabs to configure sources, effects, and settings. Export plans or render via FFmpeg.\n"
-            "Preview uses FFplay when available, otherwise FFmpeg."
+            "YTP+ Deluxe Edition (Python) is an automated YTP editor scaffold for Windows 7/8.1.\n"
+            "Import media, tune effect parameters, and let the generator remix clips into a single render.\n"
+            "Export plans or render via FFmpeg. Preview uses FFplay when available, otherwise FFmpeg."
         )
         ttk.Label(frame, text=overview, justify=tk.LEFT).pack(anchor="w", padx=10, pady=10)
 
@@ -310,6 +322,10 @@ class YTPPlusDeluxeApp(tk.Tk):
         self.insert_intro_var.set(self.settings.insert_intro)
         self.insert_outro_var.set(self.settings.insert_outro)
         self.plugin_test_var.set(self.settings.plugin_test)
+        self.reverse_direction_var.set(self.settings.reverse_direction)
+        self.preserve_audio_var.set(self.settings.preserve_original_audio)
+        self.cut_audio_var.set(self.settings.cut_audio)
+        self.sound_sync_var.set(self.settings.sound_sync_mode)
         self.intro_var.set(self.settings.intro_path)
         self.outro_var.set(self.settings.outro_path)
         for attr, var in self.path_vars.items():
@@ -334,6 +350,10 @@ class YTPPlusDeluxeApp(tk.Tk):
         self.settings.insert_intro = self.insert_intro_var.get()
         self.settings.insert_outro = self.insert_outro_var.get()
         self.settings.plugin_test = self.plugin_test_var.get()
+        self.settings.reverse_direction = self.reverse_direction_var.get()
+        self.settings.preserve_original_audio = self.preserve_audio_var.get()
+        self.settings.cut_audio = self.cut_audio_var.get()
+        self.settings.sound_sync_mode = self.sound_sync_var.get()
         self.settings.intro_path = self.intro_var.get()
         self.settings.outro_path = self.outro_var.get()
         self.settings.project_type = self.project_type_var.get()
@@ -387,7 +407,10 @@ class YTPPlusDeluxeApp(tk.Tk):
         if not self.sources.videos:
             messagebox.showwarning("Render", "Add at least one video source to render.")
             return
-        result = generator.render(self.sources.videos[0], job.output_path)
+        if len(self.sources.videos) > 1:
+            result = generator.render_concat(self.sources.videos, job.output_path)
+        else:
+            result = generator.render(self.sources.videos[0], job.output_path)
         self._log(f"FFmpeg exit code: {result.returncode}")
         if result.stdout:
             self._log(result.stdout)

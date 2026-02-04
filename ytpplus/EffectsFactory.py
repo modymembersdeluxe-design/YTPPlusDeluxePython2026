@@ -50,6 +50,37 @@ class EffectsFactory:
             audio_filters.append("asetrate=48000*1.02,atempo=1/1.02")
         if enabled("stutter"):
             notes.append("Stutter effect selected; will loop short slices.")
+        if enabled("random_cuts"):
+            notes.append("Random cuts enabled.")
+        if enabled("recall_post_render"):
+            notes.append("Recall post-render effect placeholder.")
+        if enabled("get_down"):
+            notes.append("Get down effect preset enabled.")
+        if enabled("temporal_scramble"):
+            notes.append("Temporal scramble effect enabled.")
+        if enabled("high_harmony"):
+            audio_filters.append("asetrate=48000*1.15,atempo=1/1.15")
+        if enabled("low_harmony"):
+            audio_filters.append("asetrate=48000*0.85,atempo=1/0.85")
+        if enabled("fearful"):
+            video_filters.append("eq=contrast=1.2:brightness=-0.1")
+            audio_filters.append("tremolo=f=6")
+        if enabled("half_reversed"):
+            notes.append("Half-reversed effect placeholder.")
+        if enabled("pitch_shift"):
+            notes.append("Pitch shift effect placeholder.")
+        if enabled("mirror_symmetry"):
+            notes.append("Mirror symmetry effect placeholder.")
+        if enabled("hue_rotate"):
+            video_filters.append("hue=h=90")
+        if enabled("spadinner"):
+            overlays.append("spadinner_assets")
+        if enabled("confusion"):
+            notes.append("Confusion effect placeholder.")
+        if enabled("overlay_plus_three"):
+            overlays.append("overlay_plus_three")
+        if enabled("ytpmv_auto"):
+            notes.append("YTPMV automatic effect placeholder.")
         if enabled("earrape"):
             audio_filters.append("volume=10")
         if enabled("autotune_chaos"):
@@ -76,8 +107,6 @@ class EffectsFactory:
             notes.append("Sentence mixing enabled; reorder segments.")
         if enabled("random_clip_shuffle"):
             notes.append("Random clip shuffle enabled.")
-        if enabled("random_cuts"):
-            notes.append("Random cuts enabled.")
 
         return EffectResult(
             audio_filters=audio_filters,
